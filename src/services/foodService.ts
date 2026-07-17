@@ -29,3 +29,8 @@ export async function searchFoods(
  return response.data;
 
 }
+
+export async function updateFood(id: number, food: Omit<Food, 'id'>) {
+  const response = await api.put(`/foods/${id}`, food);
+  return response.data;
+}

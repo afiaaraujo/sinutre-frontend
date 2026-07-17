@@ -47,3 +47,19 @@ npm run preview # preview do build
 
 O tema customizado `sinutre` (paleta verde) está definido em
 `src/styles/theme.css` usando a sintaxe `@plugin 'daisyui/theme'` do daisyUI v5.
+
+## Funcionalidades Desenvolvidas
+
+Para atender aos requisitos do projeto final, as seguintes funcionalidades foram implementadas:
+
+- [x] Repositórios públicos no GitHub.
+- [x] Backend em produção no Railway.
+- [x] Frontend em produção na Vercel.
+
+**01:** Alterar alimento cadastrado.
+**02:** Excluir alimento cadastrado.
+**04:** Cadastro de dados complementares (meta calórica, altura e peso) com validação.
+**07:** Sinalização visual quando a meta calórica diária é ultrapassada.
+**12:** Personalização das cores da interface.
+
+---
