@@ -56,10 +56,18 @@ Para atender aos requisitos do projeto final, as seguintes funcionalidades foram
 - [x] Backend em produção no Railway.
 - [x] Frontend em produção na Vercel.
 
-**01:** Alterar alimento cadastrado.
-**02:** Excluir alimento cadastrado.
-**04:** Cadastro de dados complementares (meta calórica, altura e peso) com validação.
-**07:** Sinalização visual quando a meta calórica diária é ultrapassada.
-**12:** Personalização das cores da interface.
+- [ ] **01:** Alterar alimento cadastrado.
+- [ ] **02:** Excluir alimento cadastrado.
+- [ ] **04:** Cadastro de dados complementares (meta calórica, altura e peso) com validação.
+- [ ] **07:** Sinalização visual quando a meta calórica diária é ultrapassada.
+- [ ] **12:** Personalização das cores da interface.
+
+Além dos requisitos básicos, desenvolvi funcionalidades extras para enriquecer a experiência do usuário:
+
+*   **Página de Métricas e Estatísticas:**
+
+    *   Interface dedicada para visualização de dados de consumo calórico.
+    *   Utilização da biblioteca **Recharts** para renderização de gráficos interativos e responsivos.
+    *   Integração direta com o backend, permitindo que o usuário acompanhe sua evolução de forma visual, intuitiva e em tempo real.
 
 ---

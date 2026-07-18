@@ -39,6 +39,7 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
 
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingMeal, setEditingMeal] = useState<Meal | null>(null);
 
   async function loadMeals() {
     try {
@@ -48,6 +49,11 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
       setLoading(false);
     }
   }
+
+  const handleEditMeal = (meal: Meal) => {
+  setEditingMeal(meal);
+  modal.openWith(meal.type); 
+};
 
   useEffect(() => {
     loadMeals();
@@ -139,7 +145,8 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
         </div>
 
         <MealsTable meals={meals} />
-        <MealsList meals={meals} />
+        <MealsList meals={meals}
+        onActionClick={handleEditMeal} />
       </div>
 
       <MealFab onSelectCategory={modal.openWith} />
@@ -147,9 +154,14 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
       <AddMealModal
         open={modal.open}
         typeMeal={modal.selectedCategory}
-        onClose={modal.close}
+        
+        onClose={() => {
+    setEditingMeal(null);
+    modal.close();
+        }}
         onSave={modal.close}
         onMealCreated={loadMeals}
+        mealToEdit={editingMeal}
       />
     </>
   );

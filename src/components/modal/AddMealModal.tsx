@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { FoodItem } from '@/types/meal';
 import { MealItemForm } from './MealItemForm';
 import { MealItemsTable } from './MealItemsTable';
@@ -6,7 +6,8 @@ import { MealMacrosSummary } from './MealMacrosSummary';
 import { MealMetadataForm } from './MealMetadataForm';
 import { MealCategory } from '@/types/meal';
 import { MEAL_CATEGORY_BY_ID } from '@/constants/mealCategories';
-import { createMeal } from '@/services/mealService';
+import { createMeal, updateMeal } from '@/services/mealService';
+import { Meal } from '@/types/mealSummary';
 
 import { MealState } from '@/types/meal';
 
@@ -16,6 +17,7 @@ interface AddMealModalProps {
   onSave: () => void;
   typeMeal: MealCategory | null;
   onMealCreated: () => Promise<void>;
+  mealToEdit?: Meal | null;
 }
 
 
@@ -24,14 +26,15 @@ export function AddMealModal({
   typeMeal,
   onClose,
   //onSave,
-  onMealCreated
+  onMealCreated,
+  mealToEdit,
 }: AddMealModalProps) {
   if(!typeMeal){
     return <></>
   }
 
   const category = MEAL_CATEGORY_BY_ID[typeMeal];
-  
+
   const [meal, setMeal] = useState<MealState>({
     description: '',
     type: category.id,
@@ -39,6 +42,34 @@ export function AddMealModal({
   });
 
   const [items, setItems] = useState<FoodItem[]>([]);
+
+  useEffect(() => {
+  if (mealToEdit) {
+    setMeal({
+      description: mealToEdit.name,
+      type: mealToEdit.type,
+      eatTime: mealToEdit.eatTime,
+    });
+    
+    setItems(mealToEdit.items.map(item => ({
+      id: item.id,
+      foodId: item.foodId,
+      grams: item.grams,
+      name: item.food?.name || '',
+      calories: item.food?.caloriesPer100g ? (item.food.caloriesPer100g * item.grams / 100) : 0,
+      carbs: item.food?.carbsPer100g ? (item.food.carbsPer100g * item.grams / 100) : 0,
+      protein: item.food?.proteinPer100g ? (item.food.proteinPer100g * item.grams / 100) : 0,
+      fat: item.food?.fatPer100g ? (item.food.fatPer100g * item.grams / 100) : 0,
+    })));
+  } else {
+    setMeal({ 
+      description: '', 
+      type: category.id, 
+      eatTime: '' 
+    });
+    setItems([]);
+  }
+}, [mealToEdit, category.id]);
 
   function handleAddItem(
     item: FoodItem,
@@ -60,13 +91,19 @@ export function AddMealModal({
   }
 
   async function handleSaveMeal() {
-    await createMeal({
-      ...meal,
-      items: items.map((item) => ({
-        foodId: item.foodId,
-        grams: item.grams,
-      })),
-    });
+  const mealData = {
+    ...meal,
+    items: items.map((item) => ({
+      foodId: item.foodId,
+      grams: item.grams,
+    })),
+  };
+
+  if (mealToEdit) {
+    await updateMeal(mealToEdit.id, mealData);
+  } else {
+    await createMeal(mealData);
+  }
 
     await onMealCreated();
 
@@ -99,7 +136,9 @@ export function AddMealModal({
   return (
     <div className={`modal ${open ? 'modal-open' : ''}`} role="dialog">
       <div className="modal-box max-w-6xl">
-        <h2 className="text-3xl font-semibold mb-6">Adicionar Refeição</h2>
+        <h2 className="text-3xl font-semibold mb-6">
+    {mealToEdit ? 'Editar Refeição' : 'Adicionar Refeição'}
+  </h2>
         
         <MealMacrosSummary macros={macros} />
         <MealMetadataForm meal={meal} setMeal={setMeal} />
