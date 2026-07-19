@@ -12,6 +12,8 @@ const MODAL_ID = 'create-food-modal';
 export function DietFoodPage() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingFood, setEditingFood] = useState<Food | null>(null);
+  const EDIT_MODAL_ID = 'edit-food-modal';
 
   async function loadFoods() {
     try {
@@ -43,9 +45,18 @@ export function DietFoodPage() {
               className="card bg-base-100 shadow-sm"
             >
               <div className="card-body">
-                <h2 className="card-title">
-                  {food.name}
-                </h2>
+                <h2 className="card-title flex justify-between items-center">
+  {food.name}
+  <button 
+    className="btn btn-ghost btn-sm"
+    onClick={() => {
+      setEditingFood(food);
+      (document.getElementById(EDIT_MODAL_ID) as HTMLDialogElement)?.showModal();
+    }}
+  >
+    ✏️
+  </button>
+</h2>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                   <span>
@@ -71,22 +82,28 @@ export function DietFoodPage() {
       )}
 
       <button
-        className="btn btn-primary btn-circle btn-lg fixed bottom-6 right-6 shadow-lg z-50"
-        onClick={() =>
-          (
-            document.getElementById(
-              MODAL_ID,
-            ) as HTMLDialogElement
-          )?.showModal()
-        }
-      >
-        <Plus size={24} weight="bold" />
-      </button>
+  className="btn btn-primary btn-circle btn-lg fixed bottom-6 right-6 shadow-lg z-50"
+  onClick={() => {
+    setEditingFood(null);
+    (document.getElementById(MODAL_ID) as HTMLDialogElement)?.showModal();
+  }}
+>
+  <Plus size={24} weight="bold" />
+</button>
 
       <AddFoodModal
-        modalId={MODAL_ID}
-        onCreated={loadFoods}
-      />
+  key="modal-create" 
+  modalId={MODAL_ID}
+  foodToEdit={null}
+  onCreated={loadFoods}
+/>
+
+<AddFoodModal
+  key="modal-edit"
+  modalId={EDIT_MODAL_ID}
+  foodToEdit={editingFood}
+  onCreated={loadFoods}
+/>
     </div>
   );
 }

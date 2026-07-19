@@ -1,14 +1,18 @@
 import { useState } from 'react';
-import { createFood } from '@/services/foodService';
+import { createFood, updateFood } from '@/services/foodService';
+import type { Food } from '@/types/food';
+import { useEffect } from 'react';
 
 interface AddFoodModalProps {
   modalId: string;
   onCreated: () => Promise<void> | void;
+  foodToEdit?: Food | null;
 }
 
 export function AddFoodModal({
   modalId,
   onCreated,
+  foodToEdit
 }: AddFoodModalProps) {
   const [name, setName] = useState('');
 
@@ -26,42 +30,56 @@ export function AddFoodModal({
 
   const [loading, setLoading] = useState(false);
 
-  async function handleSave() {
-    try {
-      setLoading(true);
-
-      await createFood({
-        name,
-        caloriesPer100g: Number(caloriesPer100g),
-        carbsPer100g: Number(carbsPer100g),
-        proteinPer100g: Number(proteinPer100g),
-        fatPer100g: Number(fatPer100g),
-      });
-
-      setName('');
-      setCaloriesPer100g('');
-      setCarbsPer100g('');
-      setProteinPer100g('');
-      setFatPer100g('');
-
-      await onCreated();
-
-      (
-        document.getElementById(
-          modalId,
-        ) as HTMLDialogElement
-      )?.close();
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+  if (foodToEdit) {
+    setName(foodToEdit.name);
+    setCaloriesPer100g(String(foodToEdit.caloriesPer100g));
+    setCarbsPer100g(String(foodToEdit.carbsPer100g));
+    setProteinPer100g(String(foodToEdit.proteinPer100g));
+    setFatPer100g(String(foodToEdit.fatPer100g));
+  } else {
+    // Limpa os campos se for um novo cadastro
+    setName('');
+    setCaloriesPer100g('');
+    setCarbsPer100g('');
+    setProteinPer100g('');
+    setFatPer100g('');
   }
+}, [foodToEdit]);
+
+async function handleSave() {
+  try {
+    setLoading(true);
+
+    const foodData = {
+      name,
+      caloriesPer100g: Number(caloriesPer100g),
+      carbsPer100g: Number(carbsPer100g),
+      proteinPer100g: Number(proteinPer100g),
+      fatPer100g: Number(fatPer100g),
+    };
+
+    if (foodToEdit) {
+      // Edição
+      await updateFood(foodToEdit.id, foodData);
+    } else {
+      // Criação
+      await createFood(foodData);
+    }
+
+    await onCreated();
+    (document.getElementById(modalId) as HTMLDialogElement)?.close();
+  } finally {
+    setLoading(false);
+  }
+}
 
   return (
     <dialog id={modalId} className="modal">
       <div className="modal-box">
         <h3 className="font-bold text-lg">
-          Novo alimento
-        </h3>
+  {foodToEdit ? 'Editar alimento' : 'Novo alimento'}
+</h3>
 
         <div className="space-y-3 mt-4">
           <input
