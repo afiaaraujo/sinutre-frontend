@@ -4,7 +4,6 @@ import { TotalMealsCard } from '@/components/cards/TotalMealsCard';
 import { Header } from '@/components/layout/Header';
 import { MacroStatsBar } from '@/components/macros/MacroStatsBar';
 import { MealFab } from '@/components/meals/MealFab';
-import { MealsList } from '@/components/meals/MealsList';
 import { MealsTable } from '@/components/meals/MealsTable';
 import { AddMealModal } from '@/components/modal/AddMealModal';
 import { useAuth } from '@/context/AuthContext';
@@ -58,6 +57,17 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
   useEffect(() => {
     loadMeals();
   }, []);
+
+  async function handleDeleteMeal(meal: Meal) {
+    if (window.confirm(`Deseja realmente excluir a refeição "${meal.name}"?`)) {
+      try {
+        await api.delete(`/meals/${meal.id}`);
+        loadMeals(); // Recarrega a lista para atualizar a tabela e os contadores
+      } catch (error) {
+        console.error("Erro ao excluir refeição:", error);
+      }
+    }
+  }
 
   const mealsSummary = useMemo(() => {
     const today = new Date();
@@ -144,9 +154,11 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
           <AddMealCard onSelectCategory={modal.openWith} />
         </div>
 
-        <MealsTable meals={meals} />
-        <MealsList meals={meals}
-        onActionClick={handleEditMeal} />
+        <MealsTable 
+  meals={meals} 
+  onEdit={handleEditMeal} 
+  onDelete={handleDeleteMeal} 
+/>
       </div>
 
       <MealFab onSelectCategory={modal.openWith} />
