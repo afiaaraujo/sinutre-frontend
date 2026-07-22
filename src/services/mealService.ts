@@ -34,3 +34,8 @@ export async function getMeals() {
   const response = await api.get('/meals');
   return response.data;
 }
+
+export async function deleteMeal(id: number) {
+  return api.delete(`/meals/${id}`);
+}
+
