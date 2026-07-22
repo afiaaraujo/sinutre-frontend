@@ -48,39 +48,22 @@ npm run preview # preview do build
 O tema customizado `sinutre` (paleta verde) está definido em
 `src/styles/theme.css` usando a sintaxe `@plugin 'daisyui/theme'` do daisyUI v5.
 
-🥗 SiNutre - Dashboard de Nutrição
-
-🚀 Tecnologias Utilizadas
-
-Backend: Node.js, Express, Prisma ORM, PostgreSQL (via Railway).
-
-Frontend: React, Vite, Styled Components, Recharts (para visualização de métricas).
-
-🛠 Funcionalidades Desenvolvidas
-
-✅ Requisitos Obrigatórios
+## Requisitos Obrigatórios
 
 [x] Repositórios públicos no GitHub (Backend & Frontend).
-
 [x] MVP de Backend em produção no Railway.
-
 [x] MVP de Frontend em produção na Vercel.
 
-📈 Requisitos Complementares
+## Requisitos Complementares
 
 [x] 01: Alteração de alimentos cadastrados (CRUD completo).
-
 [ ] 02: Exclusão de alimentos cadastrados (Em implementação).
-
 [ ] 04: Cadastro de dados complementares (meta calórica, altura, peso) com validação de dados.
-
 [ ] 07: Sistema de alerta visual ao exceder a meta calórica diária.
-
 [ ] 11: Autenticação segura com funcionalidade de Logout.
-
 [ ] 12: Interface personalizada com tema responsivo.
 
-💎 Funcionalidades Extras (Diferenciais de UX/UI)
+## Funcionalidades Extras (Diferenciais de UX/UI)
 
 Gestão Dinâmica de Refeições: Implementação de menu contextual (ações) por refeição, permitindo edição e exclusão rápida para correção de dados, garantindo maior autonomia ao usuário.
 
@@ -88,7 +71,7 @@ Página de Métricas e Estatísticas: Dashboard analítico integrado à bibliote
 
 Arquitetura de Rotas: Refatoração e estruturação das rotas de API para garantir o isolamento lógico das requisições (POST/PUT/GET), eliminando conflitos de Foreign Key e garantindo a integridade dos dados vinculados ao userId.
 
-🧠 Desafios Técnicos Superados
+## Desafios Técnicos Superados
 
 Durante o desenvolvimento do MVP, um dos principais desafios foi a estruturação das rotas de API e a integração do Front-end com o back-end via Railway. A resolução envolveu:
 
@@ -98,10 +81,10 @@ Configuração CORS: Ajuste de permissões para permitir que a aplicação na Ve
 
 Gestão de Estado: Sincronização eficiente entre o banco de dados e a interface para que as alterações fossem refletidas instantaneamente sem recarregamento forçado.
 
-🔗 Links de Acesso
+## Links de Acesso
 
-Frontend (Live): [Link para o SiNutre na Vercel]
+Frontend (Live): https://sinutre-frontend-phi.vercel.app
 
-Backend (API): [Link para o projeto no Railway]
+Backend (API): https://sinutre-backend-production-5e5d.up.railway.app
 
 ---
