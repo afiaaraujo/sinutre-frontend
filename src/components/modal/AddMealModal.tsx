@@ -45,10 +45,15 @@ export function AddMealModal({
 
   useEffect(() => {
   if (mealToEdit) {
+    // Formata a data para o padrão aceito pelo input datetime-local (YYYY-MM-DDTHH:mm)
+    const formattedEatTime = mealToEdit.eatTime 
+      ? new Date(mealToEdit.eatTime).toISOString().slice(0, 16) 
+      : '';
+
     setMeal({
       description: mealToEdit.name,
       type: mealToEdit.type,
-      eatTime: mealToEdit.eatTime,
+      eatTime: formattedEatTime,
     });
     
     setItems(mealToEdit.items.map(item => ({
