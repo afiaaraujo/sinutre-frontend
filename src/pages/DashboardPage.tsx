@@ -9,6 +9,7 @@ import { AddMealModal } from '@/components/modal/AddMealModal';
 import { useAuth } from '@/context/AuthContext';
 import { Meal } from '@/types/mealSummary';
 import { api } from '@/lib/api';
+import { deleteMeal } from '@/services/mealService';
 
 import {
   //MACRO_SUMMARY,
@@ -59,15 +60,16 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
   }, []);
 
   async function handleDeleteMeal(meal: Meal) {
-    if (window.confirm(`Deseja realmente excluir a refeição "${meal.name}"?`)) {
-      try {
-        await api.delete(`/meals/${meal.id}`);
-        loadMeals(); // Recarrega a lista para atualizar a tabela e os contadores
-      } catch (error) {
-        console.error("Erro ao excluir refeição:", error);
-      }
+  if (window.confirm(`Deseja realmente excluir a refeição "${meal.name || 'sem descrição'}"?`)) {
+    try {
+      // Passando explicitamente apenas o meal.id para a API / service
+      await deleteMeal(meal.id); 
+      loadMeals(); 
+    } catch (error) {
+      console.error("Erro ao excluir refeição:", error);
     }
   }
+}
 
   const mealsSummary = useMemo(() => {
     const today = new Date();

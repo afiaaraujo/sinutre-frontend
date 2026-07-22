@@ -5,7 +5,6 @@ export async function createMeal(
     type: string;
     eatTime: string;
     description?: string;
-
     items: {
       foodId: number;
       grams: number;
@@ -38,4 +37,3 @@ export async function getMeals() {
 export async function deleteMeal(id: number) {
   return api.delete(`/meals/${id}`);
 }
-
