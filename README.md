@@ -50,41 +50,40 @@ O tema customizado `sinutre` (paleta verde) está definido em
 
 ## Requisitos Obrigatórios
 
-[x] Repositórios públicos no GitHub (Backend & Frontend).
-[x] MVP de Backend em produção no Railway.
-[x] MVP de Frontend em produção na Vercel.
+- [x] Repositórios públicos no GitHub.
+- [x] Backend em produção no Railway.
+- [x] Frontend em produção na Vercel.
 
 ## Requisitos Complementares
 
-[x] 01: Alteração de alimentos cadastrados (CRUD completo).
-[ ] 02: Exclusão de alimentos cadastrados (Em implementação).
-[ ] 04: Cadastro de dados complementares (meta calórica, altura, peso) com validação de dados.
-[ ] 07: Sistema de alerta visual ao exceder a meta calórica diária.
-[ ] 11: Autenticação segura com funcionalidade de Logout.
-[ ] 12: Interface personalizada com tema responsivo.
+- [x] **01:** Alterar alimento cadastrado.
+- [x] **02:** Excluir alimento cadastrado.
+- [x] **07:** Sinalização visual quando a meta calórica diária é ultrapassada.
+- [x] **11:** Autenticação segura com funcionalidade de Logout.
+- [x] **12:** Personalização das cores da interface.
 
 ## Funcionalidades Extras (Diferenciais de UX/UI)
 
-Gestão Dinâmica de Refeições: Implementação de menu contextual (ações) por refeição, permitindo edição e exclusão rápida para correção de dados, garantindo maior autonomia ao usuário.
+**Gestão Dinâmica de Refeições:** Implementação de menu contextual (ações) por refeição, permitindo edição e exclusão rápida para correção de dados, garantindo maior autonomia ao usuário.
 
-Página de Métricas e Estatísticas: Dashboard analítico integrado à biblioteca Recharts, permitindo a visualização gráfica do consumo calórico em tempo real.
+**Página de Métricas e Estatísticas:** Dashboard analítico integrado à biblioteca Recharts, permitindo a visualização gráfica do consumo calórico em tempo real.
 
-Arquitetura de Rotas: Refatoração e estruturação das rotas de API para garantir o isolamento lógico das requisições (POST/PUT/GET), eliminando conflitos de Foreign Key e garantindo a integridade dos dados vinculados ao userId.
+**Arquitetura de Rotas:** Refatoração e estruturação das rotas de API para garantir o isolamento lógico das requisições (POST/PUT/GET), eliminando conflitos de Foreign Key e garantindo a integridade dos dados vinculados ao userId.
 
 ## Desafios Técnicos Superados
 
 Durante o desenvolvimento do MVP, um dos principais desafios foi a estruturação das rotas de API e a integração do Front-end com o back-end via Railway. A resolução envolveu:
 
-Refatoração de API: Correção do aninhamento de rotas (POST/PUT), o que resolvia erros de violação de chave estrangeira (P2003).
+**Refatoração de API:** Correção do aninhamento de rotas (POST/PUT), o que resolvia erros de violação de chave estrangeira (P2003).
 
-Configuração CORS: Ajuste de permissões para permitir que a aplicação na Vercel consumisse dados do servidor em produção de forma segura.
+**Configuração CORS:** Ajuste de permissões para permitir que a aplicação na Vercel consumisse dados do servidor em produção de forma segura.
 
-Gestão de Estado: Sincronização eficiente entre o banco de dados e a interface para que as alterações fossem refletidas instantaneamente sem recarregamento forçado.
+**Gestão de Estado:** Sincronização eficiente entre o banco de dados e a interface para que as alterações fossem refletidas instantaneamente sem recarregamento forçado.
 
 ## Links de Acesso
 
-Frontend (Live): https://sinutre-frontend-phi.vercel.app
+**Frontend (Live):** https://sinutre-frontend-phi.vercel.app
 
-Backend (API): https://sinutre-backend-production-5e5d.up.railway.app
+**Backend (API):** https://sinutre-backend-production-5e5d.up.railway.app
 
 ---
