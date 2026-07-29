@@ -65,7 +65,11 @@ export function MealsTableRow({ meal, onEdit, onDelete }: MealsTableRowProps) {
                 type="button"
                 onClick={() => {
                   setIsOpen(false);
-                  onDelete(meal);
+                  // Trata o ID caso venha duplicado ou como string com dois pontos (ex: "1:1")
+                  const rawId = String(meal.id);
+                  const cleanId = rawId.includes(':') ? Number(rawId.split(':')[1]) : Number(rawId);
+                  
+                  onDelete({ ...meal, id: cleanId });
                 }}
                 className="flex items-center gap-2 w-full px-4 py-2 text-xs text-left text-error hover:bg-base-200"
               >

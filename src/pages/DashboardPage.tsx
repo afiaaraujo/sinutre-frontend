@@ -113,10 +113,10 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
       );
     }).reduce(
       (acc, meal) => {
-        acc.carbs += meal.totals.carbs;
-        acc.proteins += meal.totals.proteins;
-        acc.fats += meal.totals.fats;
-        acc.calories += meal.totals.calories;
+        acc.carbs += meal.totals.carbs ?? 0;
+        acc.proteins += meal.totals.proteins ?? 0;
+        acc.fats += meal.totals.fats ?? 0;
+        acc.calories += meal.totals.calories ?? 0;
 
         return acc;
       },
@@ -125,12 +125,10 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
         proteins: 0,
         fats: 0,
         calories: 0,
-
-        caloriesGoal: 1000, //ainda não veio do banco de dados
+        caloriesGoal: 2000,
       },
     );
   }, [meals]);
-
 
   if (loading) {
     return (
