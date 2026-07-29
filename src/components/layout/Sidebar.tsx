@@ -1,18 +1,31 @@
-// import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NAV_ITEMS } from '@/constants/navigation';
 import { SidebarBrand } from './SidebarBrand';
 import { SidebarItem } from './SidebarItem';
-import { useAuth } from '@/contexts/AuthContext'; // 1. Importa o hook de autenticação
-import { SignOut } from '@phosphor-icons/react'; // 2. Importa o ícone de sair (ou outro de sua preferência)
+import { useAuth } from '@/contexts/AuthContext';
+import { SignOut, Sun, Moon } from '@phosphor-icons/react';
 
 interface SidebarProps {
   drawerId: string;
 }
 
 export function Sidebar({ drawerId }: SidebarProps) {
-  // const [activeId, setActiveId] = useState<string>('home');
   const expanded = true;
-  const { logout } = useAuth(); // 3. Pega a função logout do contexto
+  const { logout } = useAuth();
+
+  // Estado para controlar e alternar o tema da aplicação
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('sinutre.theme') || 'sinutre';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('sinutre.theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'sinutre' ? 'dark' : 'sinutre'));
+  };
 
   return (
     <aside className="drawer-side z-50">
@@ -41,8 +54,19 @@ export function Sidebar({ drawerId }: SidebarProps) {
           </ul>
         </div>
 
-        {/* 4. Botão de Sair adicionado no rodapé da barra lateral */}
-        <div className="w-full p-4 border-t border-base-200">
+        {/* Rodapé da barra lateral contendo a troca de tema e o botão de sair */}
+        <div className="w-full p-4 border-t border-base-200 flex flex-col gap-2">
+          {/* Botão de alternância de tema */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium hover:bg-base-200 rounded-lg transition-colors"
+          >
+            {theme === 'sinutre' ? <Moon size={20} /> : <Sun size={20} />}
+            {expanded && <span>{theme === 'sinutre' ? 'Modo Escuro' : 'Modo Claro'}</span>}
+          </button>
+
+          {/* Botão de Sair */}
           <button
             type="button"
             onClick={logout}
