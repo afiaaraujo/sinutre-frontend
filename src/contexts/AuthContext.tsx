@@ -44,11 +44,11 @@ export function AuthProvider({
   }
   
   const logout = () => {
-  localStorage.removeItem('@sinutre:token');
-  localStorage.removeItem('@sinutre:user');
-  setUser(null);
-  
-};
+    // Usa a mesma chave "sinutre.token" definida no seu api.ts
+    localStorage.removeItem('sinutre.token');
+    localStorage.removeItem('@sinutre:user');
+    setUser(null);
+  };
 
   useEffect(() => {
     refreshUser().finally(() =>

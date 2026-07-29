@@ -96,12 +96,18 @@ export function AddMealModal({
   }
 
   async function handleSaveMeal() {
-    // Garante que a data seja convertida para o formato correto esperado pelo Prisma/Backend
-    const formattedEatTime = meal.eatTime ? new Date(meal.eatTime).toISOString() : new Date().toISOString();
+    // Valida se a data preenchida é real. Se estiver vazia ou inválida, usa a data/hora atual.
+    let dateToProcess = meal.eatTime ? new Date(meal.eatTime) : new Date();
+    
+    if (isNaN(dateToProcess.getTime())) {
+      dateToProcess = new Date(); // fallback de segurança se a data vier corrompida
+    }
+
+    const formattedEatTime = dateToProcess.toISOString();
 
     const mealData = {
       ...meal,
-      eatTime: formattedEatTime, // Usa a data formatada corretamente
+      eatTime: formattedEatTime, 
       items: items.map((item) => ({
         foodId: item.foodId,
         grams: item.grams,
@@ -140,7 +146,7 @@ export function AddMealModal({
     [items],
   );
 
-  
+
   return (
     <div className={`modal ${open ? 'modal-open' : ''}`} role="dialog">
       <div className="modal-box max-w-6xl">
