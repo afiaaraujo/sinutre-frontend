@@ -26,11 +26,14 @@ export function DietFoodPage() {
 
   // Função para excluir o alimento
   async function handleDeleteFood(id: string | number) {
+    console.log('ID que está tentando ser excluído:', id);
+
     if (window.confirm('Tem certeza que deseja excluir este alimento?')) {
       try {
         await deleteFood(id);
-        await loadFoods(); // Recarrega a lista após excluir
+        await loadFoods(); 
       } catch (error) {
+        console.error('Detalhes do erro:', error);
         alert('Erro ao excluir o alimento.');
       }
     }
