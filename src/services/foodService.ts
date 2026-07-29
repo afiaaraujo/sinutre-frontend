@@ -34,3 +34,7 @@ export async function updateFood(id: number, food: Omit<Food, 'id'>) {
   const response = await api.put(`/foods/${id}`, food);
   return response.data;
 }
+
+export async function deleteFood(id: string | number): Promise<void> {
+  await api.delete(`/foods/${id}`);
+}

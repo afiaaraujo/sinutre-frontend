@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Plus } from '@phosphor-icons/react';
+import { Plus, Trash } from '@phosphor-icons/react'; // Importa o ícone de lixeira
 
 import { SimpleHeader } from '@/components/layout/SimpleHeader';
 import { AddFoodModal } from '@/components/modal/AddFoodModal';
 
-import { getFoods } from '@/services/foodService';
+import { getFoods, deleteFood } from '@/services/foodService'; // Importa o deleteFood
 import type { Food } from '@/types/food';
 
 const MODAL_ID = 'create-food-modal';
@@ -21,6 +21,18 @@ export function DietFoodPage() {
       setFoods(data);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Função para excluir o alimento
+  async function handleDeleteFood(id: string | number) {
+    if (window.confirm('Tem certeza que deseja excluir este alimento?')) {
+      try {
+        await deleteFood(id);
+        await loadFoods(); // Recarrega a lista após excluir
+      } catch (error) {
+        alert('Erro ao excluir o alimento.');
+      }
     }
   }
 
@@ -46,17 +58,32 @@ export function DietFoodPage() {
             >
               <div className="card-body">
                 <h2 className="card-title flex justify-between items-center">
-  {food.name}
-  <button 
-    className="btn btn-ghost btn-sm"
-    onClick={() => {
-      setEditingFood(food);
-      (document.getElementById(EDIT_MODAL_ID) as HTMLDialogElement)?.showModal();
-    }}
-  >
-    ✏️
-  </button>
-</h2>
+                  {food.name}
+                  
+                  {/* Container para os botões de ação (Editar e Excluir) */}
+                  <div className="flex items-center gap-1">
+                    <button 
+                      type="button"
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => {
+                        setEditingFood(food);
+                        (document.getElementById(EDIT_MODAL_ID) as HTMLDialogElement)?.showModal();
+                      }}
+                      title="Editar"
+                    >
+                      ✏️
+                    </button>
+
+                    <button 
+                      type="button"
+                      className="btn btn-ghost btn-sm text-error hover:bg-error/10"
+                      onClick={() => handleDeleteFood(food.id)}
+                      title="Excluir"
+                    >
+                      <Trash size={18} />
+                    </button>
+                  </div>
+                </h2>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                   <span>
@@ -82,28 +109,29 @@ export function DietFoodPage() {
       )}
 
       <button
-  className="btn btn-primary btn-circle btn-lg fixed bottom-6 right-6 shadow-lg z-50"
-  onClick={() => {
-    setEditingFood(null);
-    (document.getElementById(MODAL_ID) as HTMLDialogElement)?.showModal();
-  }}
->
-  <Plus size={24} weight="bold" />
-</button>
+        type="button"
+        className="btn btn-primary btn-circle btn-lg fixed bottom-6 right-6 shadow-lg z-50"
+        onClick={() => {
+          setEditingFood(null);
+          (document.getElementById(MODAL_ID) as HTMLDialogElement)?.showModal();
+        }}
+      >
+        <Plus size={24} weight="bold" />
+      </button>
 
       <AddFoodModal
-  key="modal-create" 
-  modalId={MODAL_ID}
-  foodToEdit={null}
-  onCreated={loadFoods}
-/>
+        key="modal-create" 
+        modalId={MODAL_ID}
+        foodToEdit={null}
+        onCreated={loadFoods}
+      />
 
-<AddFoodModal
-  key="modal-edit"
-  modalId={EDIT_MODAL_ID}
-  foodToEdit={editingFood}
-  onCreated={loadFoods}
-/>
+      <AddFoodModal
+        key="modal-edit"
+        modalId={EDIT_MODAL_ID}
+        foodToEdit={editingFood}
+        onCreated={loadFoods}
+      />
     </div>
   );
 }

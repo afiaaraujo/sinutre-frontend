@@ -44,10 +44,12 @@ export function AuthProvider({
   }
   
   const logout = () => {
-    // Usa a mesma chave "sinutre.token" definida no seu api.ts
     localStorage.removeItem('sinutre.token');
     localStorage.removeItem('@sinutre:user');
     setUser(null);
+    
+    // Força o redirecionamento para a tela de login
+    window.location.href = '/login'; 
   };
 
   useEffect(() => {
