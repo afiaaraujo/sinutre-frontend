@@ -122,10 +122,10 @@ export function AddMealModal({
     () =>
       items.reduce(
         (acc, item) => {
-          acc.carbs += item.carbs;
-          acc.proteins += item.protein;
-          acc.fats += item.fat;
-          acc.calories += item.calories;
+          acc.carbs += Number(item.carbs) || 0;
+          acc.proteins += Number(item.protein) || 0;
+          acc.fats += Number(item.fat) || 0;
+          acc.calories += Number(item.calories) || 0;
 
           return acc;
         },
@@ -140,7 +140,7 @@ export function AddMealModal({
     [items],
   );
 
-
+  
   return (
     <div className={`modal ${open ? 'modal-open' : ''}`} role="dialog">
       <div className="modal-box max-w-6xl">

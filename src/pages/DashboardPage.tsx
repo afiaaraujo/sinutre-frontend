@@ -8,27 +8,14 @@ import { MealsTable } from '@/components/meals/MealsTable';
 import { AddMealModal } from '@/components/modal/AddMealModal';
 import { useAuth } from '@/context/AuthContext';
 import { Meal } from '@/types/mealSummary';
+import { MealCategory } from '@/types/meal';
 import { api } from '@/lib/api';
 import { deleteMeal } from '@/services/mealService';
-
-import {
-  //MACRO_SUMMARY,
-  //MEALS_SUMMARY,
-  // RECENT_MEALS,
-  // SAMPLE_MEAL_ITEMS,
-} from '@/data/mockData';
 import { useMealModal } from '@/hooks/useMealModal';
 
 interface DashboardPageProps {
   drawerId: string;
 }
-
-//const MODAL_MACROS = {
-//  carbs: 0,
-//  proteins: 0,
-//  fats: 0,
-//  calories: 0,
-//};
 
 export function DashboardPage({ drawerId }: DashboardPageProps) {
   const { user } = useAuth();
@@ -50,26 +37,32 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
     }
   }
 
+  // Função chamada ao clicar em editar na tabela
   const handleEditMeal = (meal: Meal) => {
-  setEditingMeal(meal);
-  modal.openWith(meal.type); 
-};
+    setEditingMeal(meal);
+    modal.openWith(meal.type); 
+  };
+
+  // Função dedicada para abrir o modal limpando qualquer rastro de edição anterior (Criação nova)
+  const handleOpenCreateModal = (category: MealCategory) => {
+    setEditingMeal(null);
+    modal.openWith(category);
+  };
 
   useEffect(() => {
     loadMeals();
   }, []);
 
   async function handleDeleteMeal(meal: Meal) {
-  if (window.confirm(`Deseja realmente excluir a refeição "${meal.name || 'sem descrição'}"?`)) {
-    try {
-      // Passando explicitamente apenas o meal.id para a API / service
-      await deleteMeal(meal.id); 
-      loadMeals(); 
-    } catch (error) {
-      console.error("Erro ao excluir refeição:", error);
+    if (window.confirm(`Deseja realmente excluir a refeição "${meal.name || 'sem descrição'}"?`)) {
+      try {
+        await deleteMeal(meal.id); 
+        loadMeals(); 
+      } catch (error) {
+        console.error("Erro ao excluir refeição:", error);
+      }
     }
   }
-}
 
   const mealsSummary = useMemo(() => {
     const today = new Date();
@@ -107,7 +100,7 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
     return meals.filter((meal) => {
       const date = new Date(meal.eatTime);
       return (
-        date.getDay() === today.getDay() &&
+        date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear()
       );
@@ -151,25 +144,26 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 items-stretch">
           <TotalMealsCard summary={mealsSummary} />
-          <AddMealCard onSelectCategory={modal.openWith} />
+          {/* Usa a função que limpa o editingMeal para novos cadastros */}
+          <AddMealCard onSelectCategory={handleOpenCreateModal} />
         </div>
 
         <MealsTable 
-  meals={meals} 
-  onEdit={handleEditMeal} 
-  onDelete={handleDeleteMeal} 
-/>
+          meals={meals} 
+          onEdit={handleEditMeal} 
+          onDelete={handleDeleteMeal} 
+        />
       </div>
 
-      <MealFab onSelectCategory={modal.openWith} />
+      {/* Usa a função que limpa o editingMeal para novos cadastros */}
+      <MealFab onSelectCategory={handleOpenCreateModal} />
 
       <AddMealModal
         open={modal.open}
         typeMeal={modal.selectedCategory}
-        
         onClose={() => {
-    setEditingMeal(null);
-    modal.close();
+          setEditingMeal(null);
+          modal.close();
         }}
         onSave={modal.close}
         onMealCreated={loadMeals}
