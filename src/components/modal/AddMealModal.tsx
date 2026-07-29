@@ -96,22 +96,25 @@ export function AddMealModal({
   }
 
   async function handleSaveMeal() {
-  const mealData = {
-    ...meal,
-    items: items.map((item) => ({
-      foodId: item.foodId,
-      grams: item.grams,
-    })),
-  };
+    // Garante que a data seja convertida para o formato correto esperado pelo Prisma/Backend
+    const formattedEatTime = meal.eatTime ? new Date(meal.eatTime).toISOString() : new Date().toISOString();
 
-  if (mealToEdit) {
-    await updateMeal(mealToEdit.id, mealData);
-  } else {
-    await createMeal(mealData);
-  }
+    const mealData = {
+      ...meal,
+      eatTime: formattedEatTime, // Usa a data formatada corretamente
+      items: items.map((item) => ({
+        foodId: item.foodId,
+        grams: item.grams,
+      })),
+    };
+
+    if (mealToEdit) {
+      await updateMeal(mealToEdit.id, mealData);
+    } else {
+      await createMeal(mealData);
+    }
 
     await onMealCreated();
-
     onClose();
   }
 
